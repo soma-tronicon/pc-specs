@@ -9,6 +9,9 @@ function report(data, cb) {
 
 Generated: {date}
 
+This document helps inform future PC hardware buying decisions. Our hope is to
+be able to play Star Citizen with medium-high settings, 1920x1080 and >= 20 FPS.
+
 ## Star citizen specs
 
 ### CPUs
@@ -83,7 +86,7 @@ function generate(obj, cb) {
   cb(res);
 }
 
-https.get('https://robertsspaceindustries.com/api/telemetry/v2/performanceheatmap/?sys_spec_min=0.0&sys_spec_max=4.0&timetable=DAY&branch=sc-alpha-3.17&cpu_interval=25&gpu_interval=25&howmany=3', res => {
+https.get('https://robertsspaceindustries.com/api/telemetry/v2/performanceheatmap/?sys_spec_min=4.0&sys_spec_max=4.0&timetable=DAY&branch=sc-alpha-3.17&cpu_interval=25&gpu_interval=25&howmany=3&scrwidth=1920&scrheight=1080', res => {
   let data = [];
   const headerDate = res.headers && res.headers.date ? res.headers.date : 'no response date';
 
