@@ -38,34 +38,22 @@ function generate(obj, cb) {
     var gpu_buckets = cb.gpu_hist.buckets;
     gpu_buckets.forEach((gb, gbi) => {
       var apv = gb.avgfps_percentiles.values;
-      if('most_common_gpu' in gb && typeof gb.most_common_gpu == 'object') {
-        gb.most_common_gpu.forEach(mcg => {
-          if(!Object.keys(buffer.gpu).includes(mcg))
-            buffer.gpu[mcg] = {'name': mcg, 'avgs': [], 'percentiles': {}};
+      ['cpu', 'gpu'].forEach(t => {
+        if(!(('most_common_' + t) in gb) ||
+          typeof gb['most_common_' + t] != 'object') return;
+        gb['most_common_' + t].forEach(mc => {
+          if(!Object.keys(buffer[t]).includes(mc))
+            buffer[t][mc] = {'name': mc, 'avgs': [], 'percentiles': {}};
           if(apv) {
             Object.keys(apv).forEach(p => {
-              if(!Object.keys(buffer.gpu[mcg].percentiles).includes(p))
-                buffer.gpu[mcg].percentiles[p] = [];
-              buffer.gpu[mcg].percentiles[p].push(apv[p]);
+              if(!Object.keys(buffer[t][mc].percentiles).includes(p))
+                buffer[t][mc].percentiles[p] = [];
+              buffer[t][mc].percentiles[p].push(apv[p]);
             });
           }
-          buffer.gpu[mcg].avgs.push(gb.avg_fps.value);
+          buffer[t][mc].avgs.push(gb.avg_fps.value);
         });
-      }
-      if('most_common_cpu' in gb && typeof gb.most_common_cpu == 'object') {
-        gb.most_common_cpu.forEach(mcc => {
-          if(!Object.keys(buffer.cpu).includes(mcc))
-            buffer.cpu[mcc] = {'name': mcc, 'avgs': [], 'percentiles': {}};
-          if(apv) {
-            Object.keys(apv).forEach(p => {
-              if(!Object.keys(buffer.cpu[mcc].percentiles).includes(p))
-                buffer.cpu[mcc].percentiles[p] = [];
-              buffer.cpu[mcc].percentiles[p].push(apv[p]);
-            });
-          }
-          buffer.cpu[mcc].avgs.push(gb.avg_fps.value);
-        });
-      }
+      });
     });
   });
   var res = {
@@ -88,12 +76,9 @@ function generate(obj, cb) {
 
 https.get('https://robertsspaceindustries.com/api/telemetry/v2/performanceheatmap/?sys_spec_min=4.0&sys_spec_max=4.0&timetable=DAY&branch=sc-alpha-3.17&cpu_interval=25&gpu_interval=25&howmany=3&scrwidth=1920&scrheight=1080', res => {
   let data = [];
-  const headerDate = res.headers && res.headers.date ? res.headers.date : 'no response date';
-
   res.on('data', chunk => {
     data.push(chunk);
   });
-
   res.on('end', () => {
     generate(JSON.parse(Buffer.concat(data).toString()), buf => {
       report(buf, r => console.log(r));
