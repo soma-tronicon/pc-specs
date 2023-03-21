@@ -74,7 +74,7 @@ function generate(obj, cb) {
   cb(res);
 }
 
-https.get('https://robertsspaceindustries.com/api/telemetry/v2/performanceheatmap/?sys_spec_min=4.0&sys_spec_max=4.0&timetable=DAY&branch=sc-alpha-3.17&cpu_interval=25&gpu_interval=25&howmany=3&scrwidth=1920&scrheight=1080', res => {
+https.get('https://robertsspaceindustries.com/api/telemetry/v2/performanceheatmap/?sys_spec_min=4.0&sys_spec_max=4.0&timetable=DAY&branch=sc-alpha-3.18&cpu_interval=25&gpu_interval=25&howmany=3&scrwidth=1920&scrheight=1080', res => {
   let data = [];
   res.on('data', chunk => {
     data.push(chunk);
