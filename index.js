@@ -1,5 +1,13 @@
 const https = require('https');
 
+const kParams = {
+  'sys_spec_min': '4.0',
+  'sys_spec_max': '4.0',
+  'branch': 'sc-alpha-3.18',
+  'scrwidth': '1920',
+  'scrheight': '1080'
+};
+
 Array.prototype.sum = function() {
   return this.reduce(function(a, b) {return a+b});
 };
@@ -14,6 +22,12 @@ be able to play Star Citizen with medium-high settings, 1920x1080 and >= 20 FPS.
 
 ## Star citizen specs
 
+Params:
+
+| Param | Value |
+|--|--|
+{params}
+
 ### CPUs
 
 {cpu-results}
@@ -22,6 +36,12 @@ be able to play Star Citizen with medium-high settings, 1920x1080 and >= 20 FPS.
 
 {gpu-results}
 `;
+
+  var params = [];
+  Object.keys(kParams).forEach(p => {
+    params.push('|' + p + '|' + kParams[p] + '|');
+  });
+  buffer = buffer.replace('{params}', params.join('\n'));
 
   Object.keys(data).forEach(d => {
     buffer = buffer.replace('{' + d + '-results}', data[d].map(i => {
@@ -74,7 +94,12 @@ function generate(obj, cb) {
   cb(res);
 }
 
-https.get('https://robertsspaceindustries.com/api/telemetry/v2/performanceheatmap/?sys_spec_min=4.0&sys_spec_max=4.0&timetable=DAY&branch=sc-alpha-3.18&cpu_interval=25&gpu_interval=25&howmany=3&scrwidth=1920&scrheight=1080', res => {
+var params = [];
+Object.keys(kParams).forEach(p => {
+  params.push(p + '=' + kParams[p]);
+});
+var url = 'https://robertsspaceindustries.com/api/telemetry/v2/performanceheatmap/?timetable=DAY&cpu_interval=25&gpu_interval=25&howmany=3&' + params.join('&');
+https.get(url, res => {
   let data = [];
   res.on('data', chunk => {
     data.push(chunk);

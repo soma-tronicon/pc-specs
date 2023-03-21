@@ -1,11 +1,21 @@
 # PC specs report
 
-Generated: 3/21/2023, 2:17:26 PM
+Generated: 3/21/2023, 2:27:02 PM
 
 This document helps inform future PC hardware buying decisions. Our hope is to
 be able to play Star Citizen with medium-high settings, 1920x1080 and >= 20 FPS.
 
 ## Star citizen specs
+
+Params:
+
+| Param | Value |
+|--|--|
+|sys_spec_min|4.0|
+|sys_spec_max|4.0|
+|branch|sc-alpha-3.18|
+|scrwidth|1920|
+|scrheight|1080|
 
 ### CPUs
 
