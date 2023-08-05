@@ -1,8 +1,8 @@
 const https = require('https');
 
 const kParams = {
-  'sys_spec_min': '4.0',
-  'sys_spec_max': '4.0',
+  'sys_spec_min': '2.0',
+  'sys_spec_max': '2.0',
   'branch': 'sc-alpha-3.18',
   'scrwidth': '1920',
   'scrheight': '1080'
